@@ -18,7 +18,7 @@
 
 
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row row-offcanvas row-offcanvas-left">
 
 			<%@ include file="includes/menu_left.jsp"%>
 
@@ -37,12 +37,9 @@
 				<c:forEach items="${groupList}" var="group">
 					<option value="${group.id}">${group.name}</option>
 				</c:forEach>
-			</select> <canvas class="my-4 chartjs-render-monitor" id="statsChart" width="927"
-				height="391" style="display: block; width: 927px; height: 391px;"></canvas>
-
-
-
-			</main>
+			</select> <canvas class="my-4 chartjs-render-monitor" id="statsChart"
+				width="927" height="391"
+				style="display: block; width: 927px; height: 391px;"></canvas> </main>
 		</div>
 	</div>
 
@@ -57,12 +54,12 @@
 		var config = {};
 		var id = 5;
 		var type = 1;
-		
+
 		var statsChart = null;
-		
+
 		function loadChart() {
-			if(statsChart != null){
-				statsChart.destroy();	
+			if (statsChart != null) {
+				statsChart.destroy();
 			}
 			var ctx = document.getElementById('statsChart').getContext('2d');
 			statsChart = new Chart(ctx, config);
@@ -116,10 +113,10 @@
 										fill : false,
 										pointBackgroundColor : '#ff6384'
 									}, {
-										data : data.maArray,
+										data : data.raArray,
 										//data : [ 5, 3, 33, 28, 40, 23, 19, 20 ],
 										lineTension : 0,
-										label : 'Radicalismo',
+										label : 'Radicalización',
 										backgroundColor : '#36a2eb',
 										borderColor : '#36a2eb',
 										fill : false,

@@ -38,13 +38,18 @@
 								</c:if>
 
 								<input name="mail" type="text" class="form-control"
-									placeholder="Email" autofocus="true" required="" /> <input
+									placeholder="Email" autofocus="true" required="" /> 
+									
+								<input
 									name="password" type="password" class="form-control"
-									placeholder="Clau" required="" /> <input type="hidden"
+									placeholder="Clau" required="" /> 
+									
+								<input type="hidden"
 									name="${_csrf.parameterName}" value="${_csrf.token}" />
 
-								<button class="btn btn-lg btn-primary btn-block" type="submit">Log
-									In</button>
+								<button class="btn btn-lg btn-primary btn-block" type="submit">
+									<spring:message code="btn.aceptar" />
+								</button>
 
 								<a href="/" class="btn btn-lg btn-danger btn-block"><spring:message
 										code="btn.cancelar" /></a>

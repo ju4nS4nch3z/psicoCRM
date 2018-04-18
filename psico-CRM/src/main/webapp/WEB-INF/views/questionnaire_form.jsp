@@ -19,7 +19,7 @@
 
 
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row row-offcanvas row-offcanvas-left">
 
 			<%@ include file="includes/menu_left.jsp"%>
 
@@ -42,30 +42,27 @@
 			</div>
 
 			<br>
-
+			<script>var qArray = new Array();</script>
 			<c:forEach items="${qDoneForm.questionnaire.questions}"
 				var="question" varStatus="qstatus">
-
-				<div class="col-md-10 column d-none question"
-					id="quest${qstatus.index}">
-					<div class="card card-primary">
-						<div class="card-heading">
-							<h4 class="card-title" style="padding: 5px;">
-								<c:out value="${question.text}"></c:out>
-							</h4>
-						</div>
-						<div class="card-body">
-							<c:forEach items="${question.options}" var="option">
-								<div class="radio">
-									<label> <input type="radio"
-										name="optionsRadios_${question.id}" question="${question.id}"
-										optionId="${option.id}"
-										id="optionsRadios_${option.id}_${option.value}"
-										value="${option}"> <c:out value="${option.text}"></c:out>
-									</label>
-								</div>
-							</c:forEach>
-						</div>
+				<script>qArray.push('${question.id}');</script>
+				<div id="quest${qstatus.index}"
+					class="quest card border-dark mb-3 question d-none"
+					style="min-height: 15rem;" ind="${qstatus.index}">
+					<div class="card-header">
+						<c:out value="${question.text}" />
+					</div>
+					<div class="card-body text-dark">
+						<c:forEach items="${question.options}" var="option">
+							<div class="card-text radio">
+								<input type="radio" name="optionsRadios_${question.id}"
+									question="${qstatus.index}"  optionId="${option.id}"
+									id="optionsRadios_${option.id}_${option.value}"
+									value="${option}">
+								<c:out value="${option.text}"></c:out>
+								
+							</div>
+						</c:forEach>
 					</div>
 				</div>
 
@@ -98,6 +95,8 @@
 				<button type="submit" id="saveQ" class="btn btn-success"
 					disabled="true">Guardar</button>
 
+				<button type="button" id="cancelQ" class="btn btn-danger">Cancelar</button>
+
 			</form:form> </main>
 		</div>
 	</div>
@@ -120,8 +119,9 @@
 				<div class="modal-footer">
 					<button type="button" class="closeBtn btn btn-danger"
 						data-dismiss="modal">Aceptar</button>
-					<button type="button" class="btn btn-info" data-dismiss="modal" data-toggle="modal"
-						data-target="#sendQModal">Enviar resultado</button>
+					<button type="button" class="btn btn-info" data-dismiss="modal"
+						data-toggle="modal" data-target="#sendQModal">Enviar
+						resultado</button>
 				</div>
 
 			</div>
@@ -156,6 +156,33 @@
 		</div>
 	</div>
 
+	<div class="modal fade" id="cancelModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">Seguro que quieres cancelar?</h4>
+					<button type="button" class="close closeBtn" data-dismiss="modal">&times;</button>
+				</div>
+
+				<!-- Modal body -->
+				<div class="modal-body">
+					<p>Se perderan los cambios que no hayas guardado</p>
+				</div>
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-info" data-dismiss="modal">No
+						estoy segurio</button>
+					<button type="button" onclick="window.history.go(-1);"
+						class="btn btn-danger">Sí, estoy seguro</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
 	<%@ include file="includes/footer.jsp"%>
 
 	<script>
@@ -163,41 +190,60 @@
 				.ready(
 						function() {
 
-							$('#sendBtn').click(function() {
-
-								$.ajax({
-									type : "GET",
-									url : "${pageContext.request.contextPath}/questionnaires/send/",
-									data : {
-										qDone : "${qDoneForm.id}",
-										student : "${qDoneForm.student.id}",
-										emails : $("#emails").val(),
-										sendParents : $('#sendParents').is(':checked')
-									},
-									dataType : 'json',
-									cache : false,
-									timeout : 600000,
-									success : function(data) {
-
-										console.log(data);
-										$('button.closeBtn').click();
-									},
-									error : function(e) {
-
-									}
-								});
+							$('#cancelQ').click(function(e) {
+								e.preventDefault();
+								$('#cancelModal').modal('show');
 
 							});
 
+							$('#sendBtn')
+									.click(
+											function() {
+
+												$
+														.ajax({
+															type : "GET",
+															url : "${pageContext.request.contextPath}/questionnaires/send/",
+															data : {
+																qDone : "${qDoneForm.id}",
+																student : "${qDoneForm.student.id}",
+																emails : $(
+																		"#emails")
+																		.val(),
+																sendParents : $(
+																		'#sendParents')
+																		.is(
+																				':checked')
+															},
+															dataType : 'json',
+															cache : false,
+															timeout : 600000,
+															success : function(
+																	data) {
+
+																console
+																		.log(data);
+																$(
+																		'button.closeBtn')
+																		.click();
+															},
+															error : function(e) {
+
+															}
+														});
+
+											});
+							/*end send button*/
+
 							$('button.closeBtn').click(function() {
-								var url = "/questionnaires/list/" 
-								+ ${qDoneForm.questionnaire.id}
+								var url = "/questionnaires/list/" + 
+								${qDoneForm.questionnaire.id}
 								+"/" + ${qDoneForm.student.id}
 								+"/1";
 								window.location.href = url;
 							});
 
-							var result = "${testResult}";
+							var result = '${testResult}';
 
 							if (typeof result != 'undefined' && result != '') {
 								console.log('result:' + result);
@@ -241,32 +287,33 @@
 														'optionId');
 												var questionNum = $(this).attr(
 														'question');
-												var q = Number(questionNum) - 1;
-
+												var q = Number(questionNum);
+												
 												map[q] = optionVal;
+												updateProgress();
 
-												updateProgress(map);
-
-												$(
-														"input[name='answers["
-																+ q
-																+ "].option.id']")
-														.val(optionId);
-												$(
-														"input[name='answers["
-																+ q
-																+ "].option.value']")
-														.val(optionVal);
+												//q = q - 1;
+												
+												//console.log($(this).parent('.quest').attr('ind'));
+												
+												console.log(q); 
+												console.log(questionNum);
+												console.log(optionId);
+												console.log(optionVal);
+												
+												$("input[name='answers["+ q	+ "].option.id']").val(optionId);
+												$("input[name='answers["+ q	+ "].option.value']").val(optionVal);
 
 											});
 
-							function updateProgress(map) {
+							function updateProgress() {
 								var bar = 0;
 								for (var i = 0; i < 20; i++) {
 									if (map[i] != null) {
 										bar++;
 									}
 								}
+								
 								var width = Number(bar) * 5;
 								$('.progressbarNum').html(width);
 								$("#progressbar").css("width", width + "%");

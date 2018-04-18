@@ -17,7 +17,7 @@
 	<%@ include file="includes/menu_top.jsp"%>
 
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row row-offcanvas row-offcanvas-left">
 
 			<%@ include file="includes/menu_left.jsp"%>
 
@@ -38,8 +38,8 @@
 							<form:errors path="name"></form:errors>
 						</div>
 					</spring:bind>
-					
-				<spring:bind path="group">
+
+					<spring:bind path="group">
 						<div class="form-group ${status.error ? 'has-error' : ''}">
 							<form:select path="group" items="${groupList}" multiple="false"
 								itemValue="id" itemLabel="name" class="form-control input-sm" />

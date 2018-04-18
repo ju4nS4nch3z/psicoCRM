@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
 
 import com.psicocrm.dao.TeacherDAO;
 import com.psicocrm.dao.UserDAO;
@@ -67,16 +69,17 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 	}
 
-	/**/
-	@Override
-	public List<Teacher> listAllTeachers() {
-		return teacherRepository.findAll();
-	}
+
 
 	@Override
 	public Page<Teacher> getTeachers(int pageNumber, long administrator_id) {
 		Pageable pageable = new PageRequest(pageNumber - 1, PAGE_SIZE, Sort.Direction.DESC, "name");
 		return teacherRepository.findByAdministrator_Id(administrator_id, pageable);
+	}
+	
+	@Override
+	public List<Teacher> listAllTeachers(long administrator_id) {
+		return teacherRepository.findByAdministrator_Id(administrator_id);
 	}
 
 	@Override
@@ -129,4 +132,45 @@ public class UserServiceImpl implements UserService {
 		}
 		return result;
 	}
+
+	@Override
+	public void validate(Administrator user, BindingResult errors) {
+
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "mail", "error.form.NotEmpty");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "error.form.NotEmpty");
+
+		if (user.getMail().length() > 254) {
+			String[] args = { "255" };
+			errors.rejectValue("mail", "error.form.length", args, null);
+		}
+		if (user.getSchool().length() > 254) {
+			String[] args = { "255" };
+			errors.rejectValue("school", "error.form.length", args, null);
+		}
+		if (user.getAddress().length() > 254) {
+			String[] args = { "255" };
+			errors.rejectValue("address", "error.form.length", args, null);
+		}
+		if (user.getPhone().length() > 254) {
+			String[] args = { "255" };
+			errors.rejectValue("phone", "error.form.length", args, null);
+		}
+		if (user.getCif().length() > 254) {
+			String[] args = { "255" };
+			errors.rejectValue("cif", "error.form.length", args, null);
+		}
+
+		if (userRepository.findByMail(user.getMail()) != null) {
+			errors.rejectValue("mail", "error.form.duplicateUser");
+		}
+
+		if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
+			errors.rejectValue("password", "error.form.password.length");
+		} else {
+			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "school", "error.form.NotEmpty");
+		}
+
+	}
+
+
 }

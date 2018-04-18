@@ -1,47 +1,70 @@
 
-<style>
-/* Stackoverflow preview fix, please ignore */
-.navbar-nav {
-	flex-direction: row;
-}
+<header>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+	<!-- a class="navbar-brand" href="#">${user.getOrganization()}</a-->
+	
+	<div class="flex-row d-flex">
+        <a class="navbar-brand" href="#" >${user.getOrganization()}</a>
+        <button type="button" class="navbar-toggler" data-toggle="offcanvas" title="Toggle responsive left sidebar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
 
-.nav-link {
-	padding-right: .5rem !important;
-	padding-left: .5rem !important;
-}
+	<button class="navbar-toggler navbar-toggler-right" type="button"
+		data-toggle="collapse" data-target="#navbarCollapse"
+		aria-controls="navbarCollapse" aria-expanded="false"
+		aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	
+	<div class="collapse navbar-collapse navbar-collapse-right"
+		id="navbarCollapse">
 
-/* Fixes dropdown menus placed on the right side */
-.ml-auto .dropdown-menu {
-	left: auto !important;
-	right: 0px;
-}
-</style>
+		<ul class="navbar-nav ml-auto">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top p-0">
-	<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">${user.getOrganization()}</a>
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#" id="accountDropdown"
+				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">${user.mail}</a>
+				<div class="dropdown-menu" aria-labelledby="accountDropdown">
+					<a class="dropdown-item" href="/user/edit/${user.id}">Edit
+						Acount</a> <a class="dropdown-item" href="/logout"><spring:message
+							code="menu.salir" /></a>
+				</div></li>
 
-	<!-- ul class="navbar-nav mr-auto">
-		<li class="nav-item active"><a class="nav-link">Left Link 1</a></li>
-		<li class="nav-item"><a class="nav-link">Left Link 2</a></li>
-	</ul-->
+		</ul>
+	</div>
 
-
-	<ul class="navbar-nav ml-auto px-3">
-		<!-- li class="nav-item"><a class="nav-link">Right Link 1</a></li-->
-		<li class="nav-item dropdown text-nowrap">
-			<a class="nav-link dropdown-toggle"
-			href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-			aria-haspopup="true" aria-expanded="false">${user.mail}</a>
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" href="/user/edit/${user.id}">Edit Acount</a> 
-				<a class="dropdown-item" href="/logout"><spring:message code="menu.salir"/></a>
-			</div>
-		</li>
-	</ul>
-
-	<%--	<ul class="navbar-nav px-3">
-		<li class="nav-item text-nowrap"><a class="nav-link"
-			href="/logout"><spring:message code="menu.salir" /></a></li>
-	</ul>
-	--%>
 </nav>
+</header>
+<%--
+
+<nav class="navbar fixed-top navbar-expand-md navbar-dark bg-primary mb-3">
+    <div class="flex-row d-flex">
+        <a class="navbar-brand" href="#" title="Free Bootstrap 4 Admin Template">Admin</a>
+        <button type="button" class="navbar-toggler" data-toggle="offcanvas" title="Toggle responsive left sidebar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse" id="collapsingNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">Home</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="//www.codeply.com">Codeply</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#myAlert" data-toggle="collapse">Alert</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="" data-target="#myModal" data-toggle="modal">About</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+--%>

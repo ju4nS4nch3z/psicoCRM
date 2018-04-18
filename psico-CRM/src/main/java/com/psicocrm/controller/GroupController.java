@@ -1,5 +1,7 @@
 package com.psicocrm.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,11 +34,11 @@ public class GroupController {
 	public String index() {
 		return "redirect:/groups/list/1";
 	}
-	
+
 	@RequestMapping(value = "/list/{pageNum}", method = RequestMethod.GET)
 	public ModelAndView index(@PathVariable int pageNum) {
 		ModelAndView model = new ModelAndView("groups_list");
-		User user = getPrincipal();
+		User user = userService.getPrincipal();
 		model.addObject("user", user);
 
 		Page<Group> page = groupService.getGroups(pageNum, user.getId());
@@ -49,37 +51,43 @@ public class GroupController {
 		model.addObject("beginIndex", begin);
 		model.addObject("endIndex", end);
 		model.addObject("currentIndex", current);
-		
+
 		model.addObject("path", "/groups/list/");
 
 		return model;
-	/*	ModelAndView model = new ModelAndView("groups_list");
-
-		model.addObject("list", groupService.findAll());
-		model.addObject("user", getPrincipal());
-
-		return model;
-		*/
+		/*
+		 * ModelAndView model = new ModelAndView("groups_list");
+		 * 
+		 * model.addObject("list", groupService.findAll()); model.addObject("user",
+		 * getPrincipal());
+		 * 
+		 * return model;
+		 */
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String userRegister(@ModelAttribute("groupForm") Group group) {
+	public String userRegister(@ModelAttribute("groupForm") Group group, HttpServletRequest request) {
 		if (group != null) {
-			group.setAdministrator((Administrator) getPrincipal());
+			group.setAdministrator((Administrator) userService.getPrincipal());
 			groupService.save(group);
 		}
+
+		request.getSession().setAttribute("groupList", groupService.getGroups(userService.getPrincipal().getId()));
+
 		return "redirect:/groups/list/1";
 	}
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-	public String deleteUsers(@PathVariable long id) {
+	public String deleteUsers(@PathVariable long id, HttpServletRequest request) {
 		groupService.delete(id);
-		
+
+		request.getSession().setAttribute("groupList", groupService.getGroups(userService.getPrincipal().getId()));
+
 		return "redirect:/groups/list/1";
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-	public ModelAndView edit(@PathVariable("id") long id) {
+	public ModelAndView edit(@PathVariable("id") long id, HttpServletRequest request) {
 		ModelAndView model = new ModelAndView("groups_form");
 
 		Group group = null;
@@ -89,21 +97,14 @@ public class GroupController {
 			group = new Group();
 		}
 		model.addObject("groupForm", group);
+		
+		User user = userService.getPrincipal();
+		model.addObject("user", user);
 
-		model.addObject("user", getPrincipal());
+		request.getSession().setAttribute("groupList", groupService.getGroups(user.getId()));
 
 		return model;
 	}
 
-	private User getPrincipal() {
-		User user = new User();
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		if (principal instanceof UserDetails) {
-			user = userService.findByMail(((UserDetails) principal).getUsername());
-		} else {
-			user = userService.findByMail(principal.toString());
-		}
-		return user;
-	}
 }

@@ -30,6 +30,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.psicocrm.model.Administrator;
 import com.psicocrm.model.Group;
 import com.psicocrm.model.Questionnaire_Done;
 import com.psicocrm.model.Student;
@@ -64,8 +65,15 @@ public class StudentController {
 		User user = getPrincipal();
 		model.addObject("user", user);
 
-		List<Long> groupsIds = ((Teacher) user).getGroupsIds();
-
+		List<Long> groupsIds = new ArrayList<Long>();
+		if (user.isAdmin()) {
+			List<Teacher> teachers = userService.listAllTeachers(user.getId());
+			for (Teacher t : teachers) {
+				groupsIds.addAll(t.getGroupsIds());
+			}
+		} else {
+			groupsIds = ((Teacher) user).getGroupsIds();
+		}
 		Page<Student> page = studentService.getStudents(pageNum, groupsIds);
 
 		int current = page.getNumber() + 1;
@@ -127,7 +135,15 @@ public class StudentController {
 	@ModelAttribute("groupList")
 	public List<Group> initializeGroups() {
 		User user = getPrincipal();
-		List<Group> list = new ArrayList<Group>(((Teacher) user).getGroups());
+		List<Group> list = new ArrayList<Group>();
+		if (user.isAdmin()) {
+			List<Teacher> teachers = userService.listAllTeachers(user.getId());
+			for (Teacher t : teachers) {
+				list.addAll(t.getGroups());
+			}
+		} else {
+			list = new ArrayList<Group>(((Teacher) user).getGroups());
+		}
 		return list;
 	}
 
@@ -143,9 +159,18 @@ public class StudentController {
 
 		model.addObject("studentForm", student);
 		User user = getPrincipal();
-		if (!user.isAdmin()) {
-			model.addObject("studentList", studentService.getStudentsByGroup(((Teacher) user).getGroupsIds()));
+		List<Student> students = new ArrayList<Student>();
+		if (user.isAdmin()) {
+			List<Teacher> teachers = userService.listAllTeachers(user.getId());
+			for (Teacher t : teachers) {
+				students.addAll(studentService.getStudentsByGroup(t.getGroupsIds()));
+			}
+		} else {
+			students = studentService.getStudentsByGroup(((Teacher) user).getGroupsIds());
 		}
+
+		model.addObject("studentList", students);
+
 		try {
 			model.addObject("studentGroups", new ObjectMapper().writeValueAsString((student.getGroup())));
 		} catch (JsonProcessingException e) {
@@ -173,29 +198,29 @@ public class StudentController {
 		JsonObject js = new JsonObject();
 		List<Questionnaire_Done> qdoneList = student.getQuestionnaires_done();
 
-		int i = 0;
 		for (Questionnaire_Done qd : qdoneList) {
-			i++;
-			// labels.add(i);
 			String date = new SimpleDateFormat("MM/dd/yyyy HH:mm").format(qd.getDate());
-			// String date = new SimpleDateFormat("MM/dd/yyyy").format(qd.getDate());
 			labels.add(date);
 			switch (qd.getQuestionnaire().getName()) {
 			case "Suicidio": {
-				JsonObject j = new JsonObject();// "{x: 10:00, y: 127}";
-
+				JsonObject j = new JsonObject();
 				j.addProperty("x", date);
 				j.addProperty("y", qd.getResult());
-				// suArray.add(qd.getResult());
 				suArray.add(j);
 				break;
 			}
 			case "Maltrato": {
-				maArray.add(qd.getResult());
+				JsonObject j = new JsonObject();
+				j.addProperty("x", date);
+				j.addProperty("y", qd.getResult());
+				maArray.add(j);
 				break;
 			}
-			case "Radicalismo": {
-				raArray.add(qd.getResult());
+			case "Radicalitzación": {
+				JsonObject j = new JsonObject();
+				j.addProperty("x", date);
+				j.addProperty("y", qd.getResult());
+				raArray.add(j);
 				break;
 			}
 			}

@@ -156,6 +156,8 @@ public class QuestionnaireServiceImpl implements QuestionaireService {
 		document.add(new Paragraph(fechaNac, norm12));
 		document.add(new Paragraph(30, resul, norm12));
 		
+		document.add(new Paragraph(20, ""));
+		
 		String html = messageSource.getMessage("resultQ" + qdone.getQuestionnaire().getId() + res, null, locale);
 
 		ElementList list = XMLWorkerHelper.parseToElementList(html, null);

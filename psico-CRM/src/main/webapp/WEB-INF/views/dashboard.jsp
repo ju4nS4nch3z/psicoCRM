@@ -10,25 +10,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
-<%@ include file="includes/header.jsp" %>
+<%@ include file="includes/header.jsp"%>
 
 <body>
 
-	<%@ include file="includes/menu_top.jsp" %>
+	<%@ include file="includes/menu_top.jsp"%>
 
+	<div class="row row-offcanvas row-offcanvas-left">
 
-	<div class="container-fluid">
-		<div class="row">
+		<%@ include file="includes/menu_left.jsp"%>
 
-			<%@ include file="includes/menu_left.jsp" %>
-			
-			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+		<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
 
-			</main>
-		</div>
+		</main>
 	</div>
 
-	<%@ include file="includes/footer.jsp" %>
+
+	<%@ include file="includes/footer.jsp"%>
+
 
 </body>
 </html>

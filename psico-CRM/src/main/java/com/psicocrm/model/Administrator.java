@@ -9,7 +9,7 @@ public class Administrator extends User {
 	@Column(name = "school")
 	private String school;
 
-	@Column(name = "adress")
+	@Column(name = "address")
 	private String address;
 
 	@Column(name = "phone")

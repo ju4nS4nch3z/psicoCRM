@@ -1,18 +1,104 @@
-/*
-.form {
-	background-color: #efefef;
-	width: 400px;
-	height: 50px;
-	border-radius: 7px;
-	padding: 20px;
+body {
+	padding-top: 56px;
+	font-family: "Lato", sans-serif;
 }
-*/
+
 .form-signin {
-    max-width:400px;
-    padding: 15px;
-    margin: 0 auto;
+	max-width: 400px;
+	padding: 15px;
+	margin: 0 auto;
 }
 
 .form-signin input {
 	margin-bottom: 1rem;
+}
+
+.form-registration {
+	padding: 5px;
+}
+
+.fixed-top {
+	z-index: 20;
+}
+
+.sidebar-offcanvas a {
+	padding: 6px 8px 6px 16px;
+	text-decoration: none;
+	font-size: 25px;
+	color: #818181;
+	display: block;
+}
+
+.sidebar-offcanvas a:hover {
+	color: #f1f1f1;
+}
+
+.sidebar-offcanvas {
+	height: 100%;
+	width: 260px;
+	position: fixed;
+	z-index: 10; //
+	left: 0 !important;
+	background-color: #111 !important;
+}
+
+.main {
+	margin-left: 160px; /
+	font-size: 28px;
+	padding: 0px 10px;
+}
+
+/*
+ * Off Canvas sidebar at medium breakpoint
+ * --------------------------------------------------
+ */
+@media screen and (max-width: 992px) {
+	.row-offcanvas {
+		position: relative;
+		-webkit-transition: all 0.25s ease-out;
+		-moz-transition: all 0.25s ease-out;
+		transition: all 0.25s ease-out;
+	}
+	.row-offcanvas-left
+  .sidebar-offcanvas {
+		left: -33%;
+	}
+	.row-offcanvas-left.active {
+		left: 33%;
+		margin-left: -6px;
+	}
+	.row-offcanvas-left.active .sidebar-offcanvas {
+		height: 100%;
+		width: 260px;
+		position: fixed;
+		z-index: 10;
+		left: 0 !important;
+		background-color: #111 !important;
+		overflow-x: hidden;
+		padding-top: 20px;
+	}
+	.sidebar-offcanvas {
+		position: absolute;
+		//top: 0;
+		width: 33%;
+		height: 100%;
+	}
+}
+
+/*
+ * Off Canvas wider at sm breakpoint
+ * --------------------------------------------------
+ */
+@media screen and (max-width: 34em) {
+	.row-offcanvas-left
+  .sidebar-offcanvas {
+		left: -45%;
+	}
+	.row-offcanvas-left.active {
+		left: 45%;
+		margin-left: -6px;
+	}
+	.sidebar-offcanvas {
+		width: 45%;
+	}
 }

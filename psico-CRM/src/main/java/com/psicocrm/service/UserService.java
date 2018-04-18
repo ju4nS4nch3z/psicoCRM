@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.springframework.data.domain.Page;
+import org.springframework.validation.BindingResult;
 
 import com.psicocrm.model.Administrator;
 import com.psicocrm.model.Student;
@@ -27,7 +28,7 @@ public interface UserService {
 	public void update(User user);
 
 	/**/
-	public List<Teacher> listAllTeachers();
+	public List<Teacher> listAllTeachers(long administrator_id);
 
 	public Page<Teacher> getTeachers(int ipage, long administrator_id);
 
@@ -36,5 +37,8 @@ public interface UserService {
 	public User getPrincipal();
 	
 	public String generatePassword();
+
+	public void validate(Administrator userForm, BindingResult bindingResult);
+
 
 }

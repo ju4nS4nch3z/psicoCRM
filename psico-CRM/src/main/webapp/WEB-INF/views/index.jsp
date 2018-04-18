@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -10,7 +11,7 @@
 <html>
 
 
-<jsp:include page="includes/header.jsp"/>
+<jsp:include page="includes/header.jsp" />
 
 
 <body>
@@ -28,18 +29,28 @@
 	</button>
 	<div class="collapse navbar-collapse navbar-collapse-right"
 		id="navbarCollapse">
-		<div class="float-right">
-			<button class="btn float-right">
-				<a href="registration"><spring:message code="btn.registrarse" /></a>
-			</button>
-			<button class="btn float-right">
-				<a href="login"><spring:message code="btn.entrar" /></a>
-			</button>
-		</div>
-		<select style="width: 67px;" class="form-control" id="locales">
-			<option value="es">ES</option>
-			<option value="ca">CA</option>
-		</select>
+
+		<ul class="navbar-nav ml-auto">
+<!-- 
+			<select style="width: 67px;" class="form-control" id="locales">
+				<option value="es">ES</option>
+				<option value="ca">CA</option>
+			</select>
+-->
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#"
+				id="languageDropdown" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false">ES</a>
+				<div class="dropdown-menu" aria-labelledby="languageDropdown">
+					<a class="dropdown-item language" lang="es" href="#">Castellano</a> <a
+						class="dropdown-item language" lang="ca" href="#">Català</a>
+				</div></li>
+
+			<li class="nav-item"><a class="nav-link" href="login"><spring:message
+						code="btn.entrar" /></a></li>
+			<li class="nav-item"><a class="nav-link" href="registration"><spring:message
+						code="btn.registrarse" /></a></li>
+		</ul>
 	</div>
 
 	</nav> </header>
@@ -180,14 +191,28 @@
 		})
 
 		$(document).ready(function() {
-			$("#locales").val('${locale}');
 			
+			$('#languageDropdown').html(('${locale}').toUpperCase());
+				
+			$(".language").click(function(){
+				
+				var lang = $(this).attr('lang');
+				if (lang != '') {
+					window.location.replace('?lang=' + lang);
+					langTxt = lang.toUpperCase();
+					$('#languageDropdown').html(langTxt);
+				}
+			});
+			/*
+			$("#locales").val('${locale}');
+
 			$("#locales").change(function() {
 				var lang = $('#locales').val();
 				if (lang != '') {
 					window.location.replace('?lang=' + lang);
 				}
 			});
+			*/
 		});
 	</script>
 

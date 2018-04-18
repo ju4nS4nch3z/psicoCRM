@@ -17,7 +17,7 @@
 	<%@ include file="includes/menu_top.jsp"%>
 
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row row-offcanvas row-offcanvas-left">
 
 			<%@ include file="includes/menu_left.jsp"%>
 
@@ -56,15 +56,21 @@
 							<td><c:out value="${student.gender}"></c:out></td>
 							<td><c:out value="${student.parentName1}"></c:out></td>
 							<td><c:out value="${student.group.name}"></c:out></td>
-							
+
 							<td><a href="/questionnaires/list/0/${student.id}/1">
-									<button type="submit" class="btn btn-primary"><i class="fa fa-clipboard-list"></i></button>
+									<button type="submit" class="btn btn-primary">
+										<i class="fa fa-clipboard-list"></i>
+									</button>
 							</a></td>
 							<td><a href="/students/edit/${student.id}">
-									<button type="submit" class="btn btn-primary"><i class="fa fa-edit"></i></button>
+									<button type="submit" class="btn btn-primary">
+										<i class="fa fa-edit"></i>
+									</button>
 							</a></td>
 							<td><a href="/students/delete/${student.id}">
-									<button type="submit" class="btn btn-primary"><i class="fa fa-trash"></i></button>
+									<button type="submit" class="btn btn-primary">
+										<i class="fa fa-trash"></i>
+									</button>
 							</a></td>
 						</tr>
 

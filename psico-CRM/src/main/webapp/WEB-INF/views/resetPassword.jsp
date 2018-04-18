@@ -24,24 +24,32 @@
 					</div>
 					<div class="modal-body">
 
-						<form:form method="POST" modelAttribute="userForm">
+						<form:form method="POST" modelAttribute="userForm"
+							class="form-signin">
 							<div class="form-group">
+
+								<spring:bind path="mail">
+									<div class="form-group">
+										<spring:message code="form.mail" var="ph_mail" />
+										<label for="mail" class="col-sm-3 col-form-label">${ph_mail}</label>
+										<form:input type="mail" path="mail"
+											class="form-control ${error != null ? 'is-invalid' : ''}"
+											placeholder="${ph_mail}" autofocus="true"></form:input>
+									</div>
+
+								</spring:bind>
+
 								<c:if test="${error != null}">
-									<div class="alert alert-danger">
+									<div class="text-danger">
 										<span>${error}</span>
 									</div>
 								</c:if>
 
-								<spring:bind path="mail">
-									<div class="form-group">
-										<form:input type="text" path="mail" class="form-control"
-											placeholder="mail" autofocus="true"></form:input>
-									</div>
-								</spring:bind>
+								<button class="btn btn-lg btn-primary btn-block" type="submit">
+									<spring:message code="btn.enviar" />
+								</button>
 
-								<button class="btn btn-lg btn-primary btn-block" type="submit">Enviar</button>
-
-								<a href="/resetPassword" class="btn btn-lg btn-danger btn-block"><spring:message
+								<a href="/login" class="btn btn-lg btn-danger btn-block"><spring:message
 										code="btn.cancelar" /></a>
 
 							</div>

@@ -17,7 +17,7 @@
 	<%@ include file="includes/menu_top.jsp"%>
 
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row row-offcanvas row-offcanvas-left">
 
 			<%@ include file="includes/menu_left.jsp"%>
 
